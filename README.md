@@ -1,0 +1,1 @@
+﻿CleanText provides access to a number of handy text manipulation processes from a simple hot key press.

@@ -42,7 +42,12 @@ namespace CleanText
 
             try
             {
-                this.hotKey = new GlobalHotkey(Constants.CTRL + Constants.SHIFT, Keys.Insert, this);
+                string savedHotKeyCombo = Properties.Settings.Default.HotKeyCombo;
+                string[] keyParts = savedHotKeyCombo.Split('|');
+                Keys key = (Keys)Enum.Parse(typeof(Keys), keyParts[1].ToString());
+                this.hotKey = new GlobalHotkey(Convert.ToInt32(keyParts[0]), key, this);
+
+                //this.hotKey = new GlobalHotkey(3, Keys.Insert, this);
 
                 this.notifyIcon = new NotifyIcon(this.trayComponents);
                 this.contextMenu = new ContextMenuStrip();
@@ -156,8 +161,26 @@ namespace CleanText
         {
             DialogOptions dlgOptions = new DialogOptions();
             dlgOptions.TopMost = true;
+            dlgOptions.KeyCombo = Properties.Settings.Default.HotKeyCombo;
+
             dlgOptions.ShowDialog();
+
             string keyCombo = dlgOptions.KeyCombo;
+            Properties.Settings.Default.HotKeyCombo = keyCombo;
+            Properties.Settings.Default.Save();
+        }
+
+        private void lblIntro_Click(object sender, EventArgs e)
+        {
+            lblIntro.Visible = false;
+            panel1.Visible = true;
+            this.Visible = false;
+        }
+
+        private void lblAbout_Click(object sender, EventArgs e)
+        {
+            DialogHelp help = new DialogHelp();
+            help.ShowDialog();
         }
 
         private void notifyIcon_MouseUp(object sender, MouseEventArgs e)
@@ -192,13 +215,6 @@ namespace CleanText
             Action(action.Replace("lbl", string.Empty));
             SetForegroundWindow(this.hwnd);
             SendKeys.Send("^v");
-            this.Visible = false;
-        }
-
-        private void lblIntro_Click(object sender, EventArgs e)
-        {
-            lblIntro.Visible = false;
-            panel1.Visible = true;
             this.Visible = false;
         }
         #endregion

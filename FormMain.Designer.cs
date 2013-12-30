@@ -123,7 +123,7 @@
             this.lblAbout.Size = new System.Drawing.Size(132, 21);
             this.lblAbout.TabIndex = 8;
             this.lblAbout.Text = "About CleanText";
-            this.lblAbout.Click += new System.EventHandler(this.Action_Click);
+            this.lblAbout.Click += new System.EventHandler(this.lblAbout_Click);
             // 
             // lblExit
             // 
@@ -215,7 +215,7 @@
             this.lblSort.TabIndex = 1;
             this.lblSort.Text = "&Sort";
             // 
-            // MainForm
+            // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -227,7 +227,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "MainForm";
+            this.Name = "FormMain";
             this.Opacity = 0.8D;
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

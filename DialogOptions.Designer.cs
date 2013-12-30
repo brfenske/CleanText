@@ -32,19 +32,22 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.btnReset = new System.Windows.Forms.Button();
-            this.cboModifier1 = new System.Windows.Forms.ComboBox();
-            this.cboModifier2 = new System.Windows.Forms.ComboBox();
-            this.cboKey = new System.Windows.Forms.ComboBox();
+            this.lblAlt = new System.Windows.Forms.Label();
+            this.lblControl = new System.Windows.Forms.Label();
+            this.lblShift = new System.Windows.Forms.Label();
+            this.lblKey = new System.Windows.Forms.Label();
+            this.txtKeyCombo = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(213, 115);
+            this.btnOK.Location = new System.Drawing.Point(338, 69);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(82, 23);
-            this.btnOK.TabIndex = 7;
+            this.btnOK.TabIndex = 1;
+            this.btnOK.TabStop = false;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
@@ -53,134 +56,100 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(302, 115);
+            this.btnCancel.Location = new System.Drawing.Point(426, 69);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(82, 23);
-            this.btnCancel.TabIndex = 6;
+            this.btnCancel.TabIndex = 2;
+            this.btnCancel.TabStop = false;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Location = new System.Drawing.Point(8, 7);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(216, 32);
+            this.label1.Size = new System.Drawing.Size(481, 32);
             this.label1.TabIndex = 8;
-            this.label1.Text = "Select the key combination that will display the CleanText dialog.";
+            this.label1.Text = "Press the key combination that you want to use to display the CleanText dialog.  " +
+    "Your selection will appear below.";
             // 
             // btnReset
             // 
             this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnReset.Location = new System.Drawing.Point(300, 45);
+            this.btnReset.Location = new System.Drawing.Point(11, 69);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(82, 23);
-            this.btnReset.TabIndex = 11;
+            this.btnReset.TabIndex = 3;
+            this.btnReset.TabStop = false;
             this.btnReset.Text = "Reset";
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
-            // cboModifier1
+            // lblAlt
             // 
-            this.cboModifier1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboModifier1.FormattingEnabled = true;
-            this.cboModifier1.Location = new System.Drawing.Point(13, 46);
-            this.cboModifier1.Name = "cboModifier1";
-            this.cboModifier1.Size = new System.Drawing.Size(67, 21);
-            this.cboModifier1.TabIndex = 12;
-            this.cboModifier1.SelectedIndexChanged += new System.EventHandler(this.cboModifier1_SelectedIndexChanged);
+            this.lblAlt.AutoSize = true;
+            this.lblAlt.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAlt.Location = new System.Drawing.Point(220, 42);
+            this.lblAlt.Name = "lblAlt";
+            this.lblAlt.Size = new System.Drawing.Size(34, 16);
+            this.lblAlt.TabIndex = 12;
+            this.lblAlt.Text = "ALT";
+            this.lblAlt.Visible = false;
             // 
-            // cboModifier2
+            // lblControl
             // 
-            this.cboModifier2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboModifier2.FormattingEnabled = true;
-            this.cboModifier2.Location = new System.Drawing.Point(91, 46);
-            this.cboModifier2.Name = "cboModifier2";
-            this.cboModifier2.Size = new System.Drawing.Size(67, 21);
-            this.cboModifier2.TabIndex = 13;
-            this.cboModifier2.SelectedIndexChanged += new System.EventHandler(this.cboModifier2_SelectedIndexChanged);
+            this.lblControl.AutoSize = true;
+            this.lblControl.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblControl.Location = new System.Drawing.Point(317, 42);
+            this.lblControl.Name = "lblControl";
+            this.lblControl.Size = new System.Drawing.Size(43, 16);
+            this.lblControl.TabIndex = 13;
+            this.lblControl.Text = "CTRL";
+            this.lblControl.Visible = false;
             // 
-            // cboKey
+            // lblShift
             // 
-            this.cboKey.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboKey.FormattingEnabled = true;
-            this.cboKey.Items.AddRange(new object[] {
-            "",
-            "F1",
-            "F2",
-            "F3",
-            "F4",
-            "F5",
-            "F6",
-            "F7",
-            "F8",
-            "F9",
-            "F10",
-            "F11",
-            "F12",
-            "PrintScr",
-            "ScrollLock",
-            "Pause",
-            "`",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "0",
-            "a",
-            "b",
-            "c",
-            "d",
-            "e",
-            "f",
-            "g",
-            "h",
-            "i",
-            "j",
-            "k",
-            "l",
-            "m",
-            "n",
-            "o",
-            "p",
-            "q",
-            "r",
-            "s",
-            "t",
-            "u",
-            "v",
-            "w",
-            "x",
-            "y",
-            "z",
-            "- (hyphen)",
-            "=",
-            "[",
-            "]",
-            "\\",
-            "; (semicolon)",
-            "\' (single quote)",
-            ", (comma)",
-            ". (period)",
-            "/"});
-            this.cboKey.Location = new System.Drawing.Point(169, 46);
-            this.cboKey.Name = "cboKey";
-            this.cboKey.Size = new System.Drawing.Size(120, 21);
-            this.cboKey.TabIndex = 14;
+            this.lblShift.AutoSize = true;
+            this.lblShift.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblShift.Location = new System.Drawing.Point(262, 42);
+            this.lblShift.Name = "lblShift";
+            this.lblShift.Size = new System.Drawing.Size(51, 16);
+            this.lblShift.TabIndex = 14;
+            this.lblShift.Text = "SHIFT";
+            this.lblShift.Visible = false;
+            // 
+            // lblKey
+            // 
+            this.lblKey.AutoSize = true;
+            this.lblKey.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblKey.Location = new System.Drawing.Point(366, 42);
+            this.lblKey.Name = "lblKey";
+            this.lblKey.Size = new System.Drawing.Size(56, 16);
+            this.lblKey.TabIndex = 15;
+            this.lblKey.Text = "<key>";
+            // 
+            // txtKeyCombo
+            // 
+            this.txtKeyCombo.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtKeyCombo.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.txtKeyCombo.Location = new System.Drawing.Point(12, 41);
+            this.txtKeyCombo.Name = "txtKeyCombo";
+            this.txtKeyCombo.Size = new System.Drawing.Size(155, 21);
+            this.txtKeyCombo.TabIndex = 0;
+            this.txtKeyCombo.Text = "Press your key combo";
+            this.txtKeyCombo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
             // 
             // DialogOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(398, 150);
-            this.Controls.Add(this.cboKey);
-            this.Controls.Add(this.cboModifier2);
-            this.Controls.Add(this.cboModifier1);
+            this.ClientSize = new System.Drawing.Size(522, 104);
+            this.Controls.Add(this.txtKeyCombo);
+            this.Controls.Add(this.lblKey);
+            this.Controls.Add(this.lblShift);
+            this.Controls.Add(this.lblControl);
+            this.Controls.Add(this.lblAlt);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnOK);
@@ -190,7 +159,9 @@
             this.Name = "DialogOptions";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Options";
+            this.Load += new System.EventHandler(this.DialogOptions_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -200,8 +171,10 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnReset;
-        private System.Windows.Forms.ComboBox cboModifier1;
-        private System.Windows.Forms.ComboBox cboModifier2;
-        private System.Windows.Forms.ComboBox cboKey;
+        private System.Windows.Forms.Label lblAlt;
+        private System.Windows.Forms.Label lblControl;
+        private System.Windows.Forms.Label lblShift;
+        private System.Windows.Forms.Label lblKey;
+        private System.Windows.Forms.TextBox txtKeyCombo;
     }
 }

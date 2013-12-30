@@ -6,24 +6,45 @@ namespace CleanText
 {
     public partial class DialogOptions : Form
     {
-        string[] modifierItems = new string[] { string.Empty, "SHIFT", "CTRL", "ALT" };
+        private string keyCode = string.Empty;
 
         public string KeyCombo = string.Empty;
 
         public DialogOptions()
         {
             InitializeComponent();
-            SetModifiers();
+            Reset();
+        }
+
+        private void DialogOptions_Load(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(KeyCombo))
+            {
+                string[] keyParts = KeyCombo.Split('|');
+                int modifiers = Convert.ToInt32(keyParts[0]);
+                lblAlt.Visible = (modifiers | Constants.ALT) == modifiers;
+                lblShift.Visible = (modifiers | Constants.SHIFT) == modifiers;
+                lblControl.Visible = (modifiers | Constants.CTRL) == modifiers;
+                this.keyCode = keyParts[1].ToString();
+                lblKey.Text = GetKeyDisplayValue();
+            }
+
+            txtKeyCombo.Select(0, 0);
         }
 
         private void btnReset_Click(object sender, EventArgs e)
         {
-            SetModifiers();
+            Reset();
         }
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            KeyCombo = cboModifier1.Text + "|" + cboModifier2.Text + "|" + cboKey.Text;
+            int modifiers = 0;
+            modifiers = lblAlt.Visible ? modifiers | Constants.ALT : modifiers;
+            modifiers = lblShift.Visible ? modifiers | Constants.SHIFT : modifiers;
+            modifiers = lblControl.Visible ? modifiers | Constants.CTRL : modifiers;
+            KeyCombo = modifiers + "|" + this.keyCode;
+
             this.Close();
         }
 
@@ -32,41 +53,48 @@ namespace CleanText
             this.Close();
         }
 
-        private void cboModifier1_SelectedIndexChanged(object sender, EventArgs e)
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
-            cboModifier2.SelectedIndexChanged -= cboModifier2_SelectedIndexChanged;
-            string selected = cboModifier2.Text;
+            lblAlt.Visible = e.Alt;
+            lblShift.Visible = e.Shift;
+            lblControl.Visible = e.Control;
+            lblKey.Visible = true;
 
-            cboModifier2.Items.Clear();
-            cboModifier2.Items.AddRange(modifierItems);
-            cboModifier2.Items.Remove(cboModifier1.Text);
-
-            cboModifier2.SelectedItem = selected;
-            cboModifier2.SelectedIndexChanged += cboModifier2_SelectedIndexChanged;
+            this.keyCode = e.KeyCode.ToString();
+            lblKey.Text = GetKeyDisplayValue();
         }
 
-        private void cboModifier2_SelectedIndexChanged(object sender, EventArgs e)
+        private string GetKeyDisplayValue()
         {
-            cboModifier1.SelectedIndexChanged -= cboModifier1_SelectedIndexChanged;
-            string selected = cboModifier1.Text;
+            string result = string.Empty;
+            switch (this.keyCode)
+            {
+                case "Oem7": result = "Quote"; break;
+                case "Cancel": result = "Pause"; break;
+                case "Next": result = "PageDown"; break;
+                case "Subtract": result = "NumpadSubtract"; break;
+                case "OemMinus": result = "Minus/Underscore"; break;
+                case "Oemplus": result = "="; break;
+                case "Oemtilde": result = "~"; break;
+                case "Oem6": result = "]"; break;
+                case "Oem5": result = "\\"; break;
+                case "OemOpenBrackets": result = "["; break;
+                case "Oem1": result = ";"; break;
+                case "OemQuestion": result = "/"; break;
+                case "OemPeriod": result = "."; break;
+                case "Oemcomma": result = ","; break;
+                default: result = this.keyCode; break;
+            }
 
-            cboModifier1.Items.Clear();
-            cboModifier1.Items.AddRange(modifierItems);
-            cboModifier1.Items.Remove(cboModifier2.Text);
-
-            cboModifier1.SelectedItem = selected;
-            cboModifier1.SelectedIndexChanged += cboModifier1_SelectedIndexChanged;
+            return result;
         }
 
-        private void SetModifiers()
+        private void Reset()
         {
-            cboModifier1.Items.Clear();
-            cboModifier1.Items.AddRange(modifierItems);
-
-            cboModifier2.Items.Clear();
-            cboModifier2.Items.AddRange(modifierItems);
-
-            cboKey.SelectedIndex = 0;
+            lblAlt.Visible = false;
+            lblShift.Visible = false;
+            lblControl.Visible = false;
+            lblKey.Text = string.Empty;
         }
     }
 }

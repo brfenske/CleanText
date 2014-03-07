@@ -20,15 +20,25 @@ namespace CleanText
         {
             if (!string.IsNullOrEmpty(KeyCombo))
             {
+                lblNotice.Text = "Change CleanText hot key";
                 string[] keyParts = KeyCombo.Split('|');
                 int modifiers = Convert.ToInt32(keyParts[0]);
-                lblAlt.Visible = (modifiers | Constants.ALT) == modifiers;
-                lblShift.Visible = (modifiers | Constants.SHIFT) == modifiers;
-                lblControl.Visible = (modifiers | Constants.CTRL) == modifiers;
+                lblAlt.Visible = Program.UseAltModifier(modifiers);
+                lblShift.Visible = Program.UseShiftModifier(modifiers);
+                lblControl.Visible = Program.UseControlModifier(modifiers);
                 this.keyCode = keyParts[1].ToString();
-                lblKey.Text = GetKeyDisplayValue();
+                lblKey.Text = Program.GetKeyDisplayValue(this.keyCode);
+            }
+            else
+            {
+                lblAlt.Visible = false;
+                lblShift.Visible = false;
+                lblControl.Visible = false;
+                this.keyCode = string.Empty;
+                lblKey.Text = string.Empty;
             }
 
+            txtKeyCombo.Focus();
             txtKeyCombo.Select(0, 0);
         }
 
@@ -61,32 +71,7 @@ namespace CleanText
             lblKey.Visible = true;
 
             this.keyCode = e.KeyCode.ToString();
-            lblKey.Text = GetKeyDisplayValue();
-        }
-
-        private string GetKeyDisplayValue()
-        {
-            string result = string.Empty;
-            switch (this.keyCode)
-            {
-                case "Oem7": result = "Quote"; break;
-                case "Cancel": result = "Pause"; break;
-                case "Next": result = "PageDown"; break;
-                case "Subtract": result = "NumpadSubtract"; break;
-                case "OemMinus": result = "Minus/Underscore"; break;
-                case "Oemplus": result = "="; break;
-                case "Oemtilde": result = "~"; break;
-                case "Oem6": result = "]"; break;
-                case "Oem5": result = "\\"; break;
-                case "OemOpenBrackets": result = "["; break;
-                case "Oem1": result = ";"; break;
-                case "OemQuestion": result = "/"; break;
-                case "OemPeriod": result = "."; break;
-                case "Oemcomma": result = ","; break;
-                default: result = this.keyCode; break;
-            }
-
-            return result;
+            lblKey.Text = Program.GetKeyDisplayValue(this.keyCode);
         }
 
         private void Reset()

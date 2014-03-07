@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace CleanText
@@ -42,107 +43,29 @@ namespace CleanText
 
             try
             {
-                string savedHotKeyCombo = Properties.Settings.Default.HotKeyCombo;
-                string[] keyParts = savedHotKeyCombo.Split('|');
-                Keys key = (Keys)Enum.Parse(typeof(Keys), keyParts[1].ToString());
-                this.hotKey = new GlobalHotkey(Convert.ToInt32(keyParts[0]), key, this);
+                if (string.IsNullOrEmpty(Properties.Settings.Default.HotKeyCombo))
+                {
+                    Options();
+                }
 
-                //this.hotKey = new GlobalHotkey(3, Keys.Insert, this);
+                string keyCombo = string.Empty;
+                keyCombo = Properties.Settings.Default.HotKeyCombo;
+                string[] keyParts = keyCombo.Split('|');
+                Keys key = (Keys)Enum.Parse(typeof(Keys), keyParts[1].ToString());
+                int modifiers = Convert.ToInt32(keyParts[0]);
+                this.hotKey = new GlobalHotkey(modifiers, key, this);
+                string keyDisplay = Program.UseAltModifier(modifiers) ? "ALT " : string.Empty;
+                keyDisplay += Program.UseShiftModifier(modifiers) ? "SHIFT " : string.Empty;
+                keyDisplay += Program.UseControlModifier(modifiers) ? "CTRL " : string.Empty;
+                keyDisplay += Program.GetKeyDisplayValue(keyParts[1].ToString());
+                lblKeyCombo.Text = keyDisplay;
+
+                //this.hotKey = new GlobalHotkey(4, Keys.Insert, this);
 
                 this.notifyIcon = new NotifyIcon(this.trayComponents);
                 this.contextMenu = new ContextMenuStrip();
 
-                ToolStripMenuItem command = null;
-
-                command = new ToolStripMenuItem();
-                command.Text = Constants.Replace;
-                command.Click += delegate
-                {
-                    Replace();
-                };
-                this.contextMenu.Items.Add(command);
-
-                command = new ToolStripMenuItem();
-                command.Text = Constants.Sort;
-                command.Click += delegate
-                {
-                    Action(Constants.Sort);
-                };
-                this.contextMenu.Items.Add(command);
-
-                command = new ToolStripMenuItem();
-                command.Text = "Sort (trim white space)";
-                command.Click += delegate
-                {
-                    Action(Constants.SortAndTrimWhiteSpace);
-                };
-                this.contextMenu.Items.Add(command);
-
-                command = new ToolStripMenuItem();
-                command.Text = "Remove Dupes and Sort";
-                command.Click += delegate
-                {
-                    Action(Constants.RemoveDupesAndSort);
-                };
-                this.contextMenu.Items.Add(command);
-
-                command = new ToolStripMenuItem();
-                command.Text = "Remove Dupes and Sort (trim white space)";
-                command.Click += delegate
-                {
-                    Action(Constants.RemoveDupesAndSortAndTrimWhiteSpace);
-                };
-                this.contextMenu.Items.Add(command);
-
-                command = new ToolStripMenuItem();
-                command.Text = "Dupe Column";
-                command.Click += delegate
-                {
-                    Action(Constants.DupeColumn);
-                };
-                this.contextMenu.Items.Add(command);
-
-                command = new ToolStripMenuItem();
-                command.Text = "Remove All Lines Containing Text...";
-                command.Click += delegate
-                {
-                    Action(Constants.RemoveAllLinesContainingText);
-                };
-                this.contextMenu.Items.Add(command);
-
-                command = new ToolStripMenuItem();
-                command.Text = "Remove All Lines Without Text...";
-                command.Click += delegate
-                {
-                    Action(Constants.RemoveAllLinesWithoutText);
-                };
-                this.contextMenu.Items.Add(command);
-
-                this.contextMenu.Items.Add("-");
-
-                command = new ToolStripMenuItem();
-                command.Text = Constants.Help;
-                command.Click += delegate
-                {
-                    DialogHelp help = new DialogHelp();
-                    help.ShowDialog();
-                };
-                this.contextMenu.Items.Add(command);
-
-                command = new ToolStripMenuItem();
-                command.Text = Constants.Exit;
-                command.Click += delegate
-                {
-                    this.trayComponents.Dispose();
-                    this.Close();
-                };
-                this.contextMenu.Items.Add(command);
-
-                this.notifyIcon.Icon = Properties.Resources.CleanText;
-                this.notifyIcon.Text = "Clean Text";
-                this.notifyIcon.MouseUp += new MouseEventHandler(notifyIcon_MouseUp);
-                this.notifyIcon.ContextMenuStrip = this.contextMenu;
-                this.notifyIcon.Visible = true;
+                InitializeSystemTray();
             }
             catch (Exception ex)
             {
@@ -151,36 +74,107 @@ namespace CleanText
         }
 
         #region Events
-        private void lblExit_Click(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
-            this.trayComponents.Dispose();
-            this.Close();
+            if (!this.hotKey.Register())
+            {
+                MessageBox.Show("Hotkey failed to register!");
+            }
         }
 
-        private void lblOptions_Click(object sender, EventArgs e)
+        private void FormMain_Shown(object sender, EventArgs e)
         {
-            DialogOptions dlgOptions = new DialogOptions();
-            dlgOptions.TopMost = true;
-            dlgOptions.KeyCombo = Properties.Settings.Default.HotKeyCombo;
+            Application.DoEvents();
+            Thread.Sleep(4000);
+            for (int i = 80 - 1; i >= 0; i--)
+            {
+                this.Opacity = Convert.ToDouble(i) / 100.0;
+                this.Refresh();
+                Thread.Sleep(20);
+            }
 
-            dlgOptions.ShowDialog();
+            this.Visible = false;
+        }
 
-            string keyCombo = dlgOptions.KeyCombo;
-            Properties.Settings.Default.HotKeyCombo = keyCombo;
-            Properties.Settings.Default.Save();
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!this.hotKey.Unregister())
+            {
+                MessageBox.Show("Hotkey failed to unregister!");
+            }
+        }
+
+        private void FormMain_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.A:
+                    RemoveAllLinesContainingText();
+                    break;
+
+                case Keys.C:
+                    DupeColumn();
+                    break;
+
+                case Keys.B:
+                    About();
+                    break;
+
+                case Keys.D:
+                    RemoveDupesAndSort();
+                    break;
+
+                case Keys.Escape:
+                    HideIntro();
+                    break;
+
+                case Keys.L:
+                    RemoveAllLinesWithoutText();
+                    break;
+
+                case Keys.O:
+                    Options();
+                    break;
+
+                case Keys.S:
+                    Sort();
+                    break;
+
+                case Keys.T:
+                    SortAndTrimWhiteSpace();
+                    break;
+
+                case Keys.W:
+                    RemoveDupesAndSortAndTrimWhiteSpace();
+                    break;
+
+                case Keys.X:
+                    Exit();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            Exit();
+        }
+
+        private void btnOptions_Click(object sender, EventArgs e)
+        {
+            Options();
         }
 
         private void lblIntro_Click(object sender, EventArgs e)
         {
-            lblIntro.Visible = false;
-            panel1.Visible = true;
-            this.Visible = false;
+            HideIntro();
         }
 
-        private void lblAbout_Click(object sender, EventArgs e)
+        private void btnAbout_Click(object sender, EventArgs e)
         {
-            DialogHelp help = new DialogHelp();
-            help.ShowDialog();
+            About();
         }
 
         private void notifyIcon_MouseUp(object sender, MouseEventArgs e)
@@ -193,33 +187,198 @@ namespace CleanText
             }
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            if (!this.hotKey.Register())
-            {
-                MessageBox.Show("Hotkey failed to register!");
-            }
-        }
-
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (!this.hotKey.Unregister())
-            {
-                MessageBox.Show("Hotkey failed to unregister!");
-            }
-        }
-
         private void Action_Click(object sender, EventArgs e)
         {
-            string action = ((Label)sender).Name;
-            Action(action.Replace("lbl", string.Empty));
+            string action = ((Button)sender).Text;
+            Action(action.Replace("btn", string.Empty));
             SetForegroundWindow(this.hwnd);
             SendKeys.Send("^v");
+            SendKeys.Send("{Home}");
             this.Visible = false;
         }
-        #endregion
+
+        private void button_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.A:
+                    RemoveAllLinesContainingText();
+                    break;
+
+                case Keys.C:
+                    DupeColumn();
+                    break;
+
+                case Keys.D:
+                    RemoveDupesAndSort();
+                    break;
+
+                case Keys.Escape:
+                    HideIntro();
+                    break;
+
+                case Keys.L:
+                    RemoveAllLinesWithoutText();
+                    break;
+
+                case Keys.O:
+                    Options();
+                    break;
+
+                case Keys.S:
+                    Sort();
+                    break;
+
+                case Keys.T:
+                    SortAndTrimWhiteSpace();
+                    break;
+
+                case Keys.W:
+                    RemoveDupesAndSortAndTrimWhiteSpace();
+                    break;
+
+                case Keys.X:
+                    Exit();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+         #endregion
 
         #region Methods
+        private static void About()
+        {
+            DialogHelp help = new DialogHelp();
+            help.ShowDialog();
+        }
+
+        private void HideIntro()
+        {
+            lblIntro.Visible = false;
+            lblIntro2.Visible = false;
+            lblKeyCombo.Visible = false;
+            pnlButtons.Visible = true;
+            this.Visible = false;
+        }
+
+        private void InitializeSystemTray()
+        {
+            ToolStripMenuItem command = null;
+
+            // -----------------------------------------------------------
+            command = new ToolStripMenuItem();
+            command.Text = Constants.Replace;
+            command.Click += delegate
+            {
+                Replace();
+            };
+            this.contextMenu.Items.Add(command);
+
+            // -----------------------------------------------------------
+            command = new ToolStripMenuItem();
+            command.Text = Constants.Sort;
+            command.Click += delegate
+            {
+                Action(Constants.Sort);
+            };
+            this.contextMenu.Items.Add(command);
+
+            // -----------------------------------------------------------
+            command = new ToolStripMenuItem();
+            command.Text = Constants.SortAndTrimWhiteSpace;
+            command.Click += delegate
+            {
+                Action(Constants.SortAndTrimWhiteSpace);
+            };
+            this.contextMenu.Items.Add(command);
+
+            // -----------------------------------------------------------
+            command = new ToolStripMenuItem();
+            command.Text = Constants.RemoveDupesAndSort;
+            command.Click += delegate
+            {
+                Action(Constants.RemoveDupesAndSort);
+            };
+            this.contextMenu.Items.Add(command);
+
+            // -----------------------------------------------------------
+            command = new ToolStripMenuItem();
+            command.Text = Constants.RemoveDupesAndSortAndTrimWhiteSpace;
+            command.Click += delegate
+            {
+                Action(Constants.RemoveDupesAndSortAndTrimWhiteSpace);
+            };
+            this.contextMenu.Items.Add(command);
+
+            // -----------------------------------------------------------
+            command = new ToolStripMenuItem();
+            command.Text = Constants.DupeColumn;
+            command.Click += delegate
+            {
+                Action(Constants.DupeColumn);
+            };
+            this.contextMenu.Items.Add(command);
+
+            // -----------------------------------------------------------
+            command = new ToolStripMenuItem();
+            command.Text = Constants.RemoveAllLinesContainingText;
+            command.Click += delegate
+            {
+                Action(Constants.RemoveAllLinesContainingText);
+            };
+            this.contextMenu.Items.Add(command);
+
+            // -----------------------------------------------------------
+            command = new ToolStripMenuItem();
+            command.Text = Constants.RemoveAllLinesWithoutText;
+            command.Click += delegate
+            {
+                Action(Constants.RemoveAllLinesWithoutText);
+            };
+            this.contextMenu.Items.Add(command);
+
+            // -----------------------------------------------------------
+            this.contextMenu.Items.Add("-");
+
+            // -----------------------------------------------------------
+            command = new ToolStripMenuItem();
+            command.Text = Constants.Options;
+            command.Click += delegate
+            {
+                Options();
+            };
+            this.contextMenu.Items.Add(command);
+
+            // -----------------------------------------------------------
+            command = new ToolStripMenuItem();
+            command.Text = Constants.Help;
+            command.Click += delegate
+            {
+                DialogHelp help = new DialogHelp();
+                help.ShowDialog();
+            };
+            this.contextMenu.Items.Add(command);
+
+            // -----------------------------------------------------------
+            command = new ToolStripMenuItem();
+            command.Text = Constants.Exit;
+            command.Click += delegate
+            {
+                this.trayComponents.Dispose();
+                this.Close();
+            };
+            this.contextMenu.Items.Add(command);
+
+            // -----------------------------------------------------------
+            this.notifyIcon.Icon = Properties.Resources.CleanText;
+            this.notifyIcon.Text = "Clean Text";
+            this.notifyIcon.MouseUp += new MouseEventHandler(notifyIcon_MouseUp);
+            this.notifyIcon.ContextMenuStrip = this.contextMenu;
+            this.notifyIcon.Visible = true;
+        }
+
         private void Action(string command)
         {
             if (Clipboard.ContainsText())
@@ -228,6 +387,10 @@ namespace CleanText
 
                 switch (command)
                 {
+                    case Constants.Replace:
+                        Replace();
+                        break;
+
                     case Constants.Sort:
                         Sort();
                         break;
@@ -500,6 +663,29 @@ namespace CleanText
             }
 
             output.Sort();
+        }
+
+        private void Options()
+        {
+            DialogOptions dlgOptions = new DialogOptions();
+            dlgOptions.TopMost = true;
+            dlgOptions.KeyCombo = Properties.Settings.Default.HotKeyCombo;
+
+            dlgOptions.ShowDialog();
+
+            string keyCombo = dlgOptions.KeyCombo;
+            string[] keyParts = keyCombo.Split('|');
+            Keys key = (Keys)Enum.Parse(typeof(Keys), keyParts[1].ToString());
+            int modifiers = Convert.ToInt32(keyParts[0]);
+            this.hotKey = new GlobalHotkey(modifiers, key, this);
+            Properties.Settings.Default.HotKeyCombo = keyCombo;
+            Properties.Settings.Default.Save();
+        }
+
+        private void Exit()
+        {
+            this.trayComponents.Dispose();
+            this.Close();
         }
 
         private void Ready()

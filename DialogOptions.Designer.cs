@@ -37,13 +37,14 @@
             this.lblShift = new System.Windows.Forms.Label();
             this.lblKey = new System.Windows.Forms.Label();
             this.txtKeyCombo = new System.Windows.Forms.TextBox();
+            this.lblNotice = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(338, 69);
+            this.btnOK.Location = new System.Drawing.Point(338, 112);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(82, 23);
             this.btnOK.TabIndex = 1;
@@ -56,7 +57,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(426, 69);
+            this.btnCancel.Location = new System.Drawing.Point(426, 112);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(82, 23);
             this.btnCancel.TabIndex = 2;
@@ -67,7 +68,7 @@
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(8, 7);
+            this.label1.Location = new System.Drawing.Point(8, 45);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(481, 32);
             this.label1.TabIndex = 8;
@@ -77,7 +78,7 @@
             // btnReset
             // 
             this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnReset.Location = new System.Drawing.Point(11, 69);
+            this.btnReset.Location = new System.Drawing.Point(11, 112);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(82, 23);
             this.btnReset.TabIndex = 3;
@@ -90,7 +91,7 @@
             // 
             this.lblAlt.AutoSize = true;
             this.lblAlt.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAlt.Location = new System.Drawing.Point(220, 42);
+            this.lblAlt.Location = new System.Drawing.Point(220, 82);
             this.lblAlt.Name = "lblAlt";
             this.lblAlt.Size = new System.Drawing.Size(34, 16);
             this.lblAlt.TabIndex = 12;
@@ -101,7 +102,7 @@
             // 
             this.lblControl.AutoSize = true;
             this.lblControl.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblControl.Location = new System.Drawing.Point(317, 42);
+            this.lblControl.Location = new System.Drawing.Point(317, 82);
             this.lblControl.Name = "lblControl";
             this.lblControl.Size = new System.Drawing.Size(43, 16);
             this.lblControl.TabIndex = 13;
@@ -112,7 +113,7 @@
             // 
             this.lblShift.AutoSize = true;
             this.lblShift.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblShift.Location = new System.Drawing.Point(262, 42);
+            this.lblShift.Location = new System.Drawing.Point(262, 82);
             this.lblShift.Name = "lblShift";
             this.lblShift.Size = new System.Drawing.Size(51, 16);
             this.lblShift.TabIndex = 14;
@@ -123,7 +124,7 @@
             // 
             this.lblKey.AutoSize = true;
             this.lblKey.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblKey.Location = new System.Drawing.Point(366, 42);
+            this.lblKey.Location = new System.Drawing.Point(366, 82);
             this.lblKey.Name = "lblKey";
             this.lblKey.Size = new System.Drawing.Size(56, 16);
             this.lblKey.TabIndex = 15;
@@ -133,18 +134,29 @@
             // 
             this.txtKeyCombo.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtKeyCombo.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.txtKeyCombo.Location = new System.Drawing.Point(12, 41);
+            this.txtKeyCombo.Location = new System.Drawing.Point(12, 81);
             this.txtKeyCombo.Name = "txtKeyCombo";
             this.txtKeyCombo.Size = new System.Drawing.Size(155, 21);
             this.txtKeyCombo.TabIndex = 0;
             this.txtKeyCombo.Text = "Press your key combo";
             this.txtKeyCombo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
             // 
+            // lblNotice
+            // 
+            this.lblNotice.AutoSize = true;
+            this.lblNotice.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNotice.Location = new System.Drawing.Point(8, 14);
+            this.lblNotice.Name = "lblNotice";
+            this.lblNotice.Size = new System.Drawing.Size(481, 16);
+            this.lblNotice.TabIndex = 16;
+            this.lblNotice.Text = "CleanText is running but you have not configured hot key access.";
+            // 
             // DialogOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(522, 104);
+            this.ClientSize = new System.Drawing.Size(522, 147);
+            this.Controls.Add(this.lblNotice);
             this.Controls.Add(this.txtKeyCombo);
             this.Controls.Add(this.lblKey);
             this.Controls.Add(this.lblShift);
@@ -157,8 +169,9 @@
             this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "DialogOptions";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Options";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "CleanText Options";
+            this.TopMost = true;
             this.Load += new System.EventHandler(this.DialogOptions_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -176,5 +189,6 @@
         private System.Windows.Forms.Label lblShift;
         private System.Windows.Forms.Label lblKey;
         private System.Windows.Forms.TextBox txtKeyCombo;
+        private System.Windows.Forms.Label lblNotice;
     }
 }

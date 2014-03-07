@@ -118,6 +118,7 @@
     <Compile Include="DialogReplace.Designer.cs">
       <DependentUpon>DialogReplace.cs</DependentUpon>
     </Compile>
+    <Content Include="Minimize.bmp" />
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>

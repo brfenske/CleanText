@@ -58,7 +58,7 @@
             this.richTextBox1.TabIndex = 2;
             this.richTextBox1.Text = "";
             // 
-            // Help
+            // DialogHelp
             // 
             this.AcceptButton = this.btnClose;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
@@ -69,9 +69,10 @@
             this.Controls.Add(this.btnClose);
             this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "Help";
+            this.Name = "DialogHelp";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CleanText Help";
+            this.TopMost = true;
             this.Load += new System.EventHandler(this.Help_Load);
             this.ResumeLayout(false);
 

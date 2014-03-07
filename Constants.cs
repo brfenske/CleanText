@@ -3,16 +3,17 @@ namespace CleanText
 {
     internal static class Constants
     {
-        internal const string Replace = "Replace";
-        internal const string Sort = "Sort";
-        internal const string SortAndTrimWhiteSpace = "SortAndTrimWhiteSpace";
-        internal const string RemoveDupesAndSort = "RemoveDupesAndSort";
-        internal const string RemoveDupesAndSortAndTrimWhiteSpace = "RemoveDupesAndSortAndTrimWhiteSpace";
-        internal const string DupeColumn = "DupeColumn";
-        internal const string RemoveAllLinesContainingText = "RemoveAllLinesContainingText";
-        internal const string RemoveAllLinesWithoutText = "RemoveAllLinesWithoutText";
-        internal const string Help = "Help...";
-        internal const string Exit = "Exit";
+        internal const string Replace = "&Replace";
+        internal const string Sort = "&Sort";
+        internal const string SortAndTrimWhiteSpace = "Sort (&trim white space)";
+        internal const string RemoveDupesAndSort = "Remove &Dupes and Sort";
+        internal const string RemoveDupesAndSortAndTrimWhiteSpace = "Remove Dupes and Sort (trim &white space)";
+        internal const string DupeColumn = "Dupe &Column";
+        internal const string RemoveAllLinesContainingText = "Remove &All Lines Containing Text...";
+        internal const string RemoveAllLinesWithoutText = "Remove All &Lines Without Text...";
+        internal const string Options = "&Options...";
+        internal const string Help = "&About CleanText";
+        internal const string Exit = "E&xit";
 
         // Keyboard modifier keys
         //public const int NOMOD = 0x0000;
